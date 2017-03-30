@@ -1,6 +1,7 @@
 package com.zrj.coolweather.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zrj.coolweather.R;
+import com.zrj.coolweather.activity.MainActivity;
 import com.zrj.coolweather.db.City;
 import com.zrj.coolweather.db.County;
 import com.zrj.coolweather.db.Province;
@@ -52,6 +54,25 @@ public class ChooseAreaFragment extends Fragment {
     private Province seletedProvince;
     private City seletedCity;
     private int currentLevel;
+
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity){
+            ((MainActivity) context).setOnKeyDownListener(new MainActivity.OnKeyDownListener() {
+                @Override
+                public void onKeyDown() {
+                    if (currentLevel == LEVEL_CITY){
+                        queryProvinces();
+                    }else if (currentLevel ==LEVEL_COUNTY){
+                        queryCities();
+                    }else{
+                        ((MainActivity) context).finish();
+                    }
+                }
+            });
+        }
+    }
 
     @Nullable
     @Override
@@ -202,6 +223,7 @@ public class ChooseAreaFragment extends Fragment {
             progressDialog.dismiss();
         }
     }
+
 }
 
 
